@@ -26,16 +26,17 @@ spec:
     - name: DOCKER_TLS_CERTDIR
       value: ""  # Disable TLS for simplicity
     volumeMounts:
-    - mountPath: /etc/docker
-      name: docker-config
+    - name: docker-config
+      mountPath: /etc/docker/daemon.json
+      subPath: daemon.json  # Mount the file directly here
   volumes:
   - name: docker-config
-    emptyDir: {}
+    configMap:
+      name: docker-daemon-config
   - name: kubeconfig-secret
     secret:
       secretName: kubeconfig-secret
 '''
-
         }
     }
     environment {
@@ -47,16 +48,7 @@ spec:
         stage('Configure Insecure Registry') {
             steps {
                 container('dind') {
-                    script {
-                        sh 'mkdir -p /etc/docker'
-                        sh '''
-                        echo '{
-                          "insecure-registries": ["nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085"]
-                        }' > /etc/docker/daemon.json
-                        '''
-                        sh 'pkill -SIGHUP dockerd'
-                        sh 'sleep 5'
-                    }
+                    sh "whoami"
                 }
             }
         }
@@ -70,9 +62,9 @@ spec:
         stage('Build - Tag - Push') {
             steps {
                 container('dind') {
-                  sh 'docker build -t nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-new-ai-assistant'
-                  sh 'docker image ls'
-                  sh 'docker push nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-new-ai-assistant'
+                    sh 'docker build -t nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-new-ai-assistant .'
+                    sh 'docker image ls'
+                    sh 'docker push nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-new-ai-assistant'
                 }
             }
         }
