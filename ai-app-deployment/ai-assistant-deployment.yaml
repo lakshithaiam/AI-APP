@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ai-assistant-deployment
+  namespace: ai-ns
 spec:
   replicas: 2
   selector:
@@ -12,9 +13,11 @@ spec:
       labels:
         app: ai-assistant
     spec:
+      imagePullSecrets:
+        - name: nexus-docker-secret  # Reference the created secret
       containers:
       - name: ai-assistant
-        image: lakshithaiam/ai-assistant:latest
+        image: nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-new-ai-assistant:latest
         ports:
         - containerPort: 8501
 ---
@@ -22,12 +25,12 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ai-assistant-service
+  namespace: ai-ns
 spec:
   selector:
     app: ai-assistant
   ports:
     - protocol: TCP
-      port: 80  # This is the service port
-      targetPort: 8501  # This is the container port
+      port: 80  # Service port
+      targetPort: 8501  # Container port
   type: ClusterIP
-

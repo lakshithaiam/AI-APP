@@ -55,6 +55,10 @@ spec:
         stage('Login to Docker Registry') {
             steps {
                 container('dind') {
+                    sh 'docker --version'
+                    sh 'sleep 30'
+                    sh 'docker info'
+                    sh 'docker ps'
                     sh 'docker login nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085 -u admin -p Devops@1252429'
                 }
             }
@@ -62,23 +66,38 @@ spec:
         stage('Build - Tag - Push') {
             steps {
                 container('dind') {
-                    sh 'docker build -t nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-new-ai-assistant .'
+                    // sh 'docker build -t nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-new-ai-assistant .'
                     sh 'docker image ls'
-                    sh 'docker push nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-new-ai-assistant'
+                    // sh 'docker push nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-new-ai-assistant'
+                    //sh 'docker pull nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-new-ai-assistant:latest'
+                    sh 'docker image ls'
                 }
             }
         }
         stage('test kubectl') {
             steps {
                 container('kubectl') {
-                    sh 'pwd'
-                    sh 'ls -a'
-                    sh 'ls'
                     sh 'kubectl version'
-                    sh 'kubectl cluster-info dump'
                     sh 'kubectl cluster-info'
                     sh 'kubectl get nodes'
-                    sh 'kubectl create ns testthree'
+                    sh 'kubectl get ns'
+                    sh 'pwd'
+                    sh 'ls -a'
+                }
+            }
+            
+        }
+        stage('Deploy AI Application') {
+            steps {
+                container('kubectl') {
+                    script {
+                        dir('ai-app-deployment') {
+                            sh 'ls'
+                            sh 'pwd'
+                            sh 'kubectl apply -f .'
+                            sh 'kubectl get all -n ai-ns'
+                        }
+                    }
                 }
             }
         }
