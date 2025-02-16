@@ -56,7 +56,7 @@ spec:
             steps {
                 container('dind') {
                     sh 'docker --version'
-                    sh 'sleep 30'
+                    sh 'sleep 20'
                     sh 'docker info'
                     sh 'docker ps'
                     sh 'docker login nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085 -u admin -p Devops@1252429'

@@ -4,7 +4,7 @@ metadata:
   name: ai-assistant-deployment
   namespace: ai-ns
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: ai-assistant
@@ -17,7 +17,7 @@ spec:
         - name: nexus-docker-secret  # Reference the created secret
       containers:
       - name: ai-assistant
-        image: nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-new-ai-assistant:latest
+        image: nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/docker-hosted-my-repo/my-new-ai-assistant:latest
         ports:
         - containerPort: 8501
 ---
