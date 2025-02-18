@@ -17,7 +17,7 @@ spec:
         - name: myregistrykey
       containers:
       - name: ai-assistant
-        image: 192.168.8.113:30085/my-repository/my-new-ai-assistant:v1
+        image: 192.168.8.113:30085/my-repository/my-new-ai-assistant:v3
         ports:
         - containerPort: 8501
 ---
