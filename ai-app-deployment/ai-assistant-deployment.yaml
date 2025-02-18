@@ -14,10 +14,10 @@ spec:
         app: ai-assistant
     spec:
       imagePullSecrets:
-        - name: nexus-docker-secret  # Reference the created secret
+        - name: myregistrykey
       containers:
       - name: ai-assistant
-        image: nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/docker-hosted-my-repo/my-new-ai-assistant:latest
+        image: 192.168.8.113:30085/my-repository/my-new-ai-assistant:v1
         ports:
         - containerPort: 8501
 ---
@@ -34,3 +34,4 @@ spec:
       port: 80  # Service port
       targetPort: 8501  # Container port
   type: ClusterIP
+
