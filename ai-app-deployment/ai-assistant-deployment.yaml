@@ -14,7 +14,7 @@ spec:
         app: ai-assistant
     spec:
       imagePullSecrets:
-        - name: myregistrykey
+        - name: nexus-secret
       containers:
       - name: ai-assistant
         image: 192.168.8.113:30085/my-repository/my-new-ai-assistant:v3
