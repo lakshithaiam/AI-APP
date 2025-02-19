@@ -11,4 +11,4 @@ spec:
     - protocol: TCP
       port: 8085        # Inside Kubernetes
       targetPort: 8085  # Inside the Pod
-      nodePort: 30085   # External port (use any between 30000-32767)
+      nodePort: 30085   # External port
