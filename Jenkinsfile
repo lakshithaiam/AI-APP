@@ -56,8 +56,6 @@ spec:
             steps {
                 container('python') {
                     sh '''
-                        pwd
-                        ls -a
                         python -m venv venv
                         source venv/bin/activate
                         pip install --upgrade pip
@@ -71,12 +69,9 @@ spec:
         stage('SonarQube Analysis') {
             steps {
                 container('sonar-scanner') {
-                    sh 'pwd'
-                    sh 'ls -a'
-                    sh 'whoami'
                     sh '''
                         sonar-scanner \
-                          -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                          -Dsonar.projectKey=my-python-project \
                           -Dsonar.sources=. \
                           -Dsonar.host.url=http://my-sonarqube-sonarqube.sonarqube-ns.svc.cluster.local:9000 \
                           -Dsonar.login=squ_17c6264f8b14aa60a29873f20b380724d2618ea1 \
@@ -97,9 +92,9 @@ spec:
         stage('Build - Tag - Push') {
             steps {
                 container('dind') {
-                    sh 'docker build -t nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4 .'
-                    sh 'docker push nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4'
-                    sh 'docker pull nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4'
+                    //sh 'docker build -t nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4 .'
+                    //sh 'docker push nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4'
+                    //sh 'docker pull nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4'
                     sh 'docker image ls'
                 }
             }
@@ -109,9 +104,7 @@ spec:
                 container('kubectl') {
                     script {
                         dir('ai-app-deployment') {
-                            sh 'kubectl apply -f .'
-                            sh 'kubectl get all -n ai-ns'
-                            sh 'sleep 5'
+                            sh 'kubectl apply -f ai-assistant-deployment.yaml'
                         }
                     }
                 }
