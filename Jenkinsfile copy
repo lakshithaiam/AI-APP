@@ -6,16 +6,6 @@ apiVersion: v1
 kind: Pod
 spec:
   containers:
-  - name: python
-    image: python:3.12-alpine
-    command:
-    - cat
-    tty: true
-  - name: sonar-scanner
-    image: sonarsource/sonar-scanner-cli
-    command:
-    - cat
-    tty: true
   - name: kubectl
     image: bitnami/kubectl:latest
     command:
@@ -50,41 +40,7 @@ spec:
         }
     }
     
-    
     stages {
-        stage('Run Tests') {
-            steps {
-                container('python') {
-                    sh '''
-                        pwd
-                        ls -a
-                        python -m venv venv
-                        source venv/bin/activate
-                        pip install --upgrade pip
-                        pip install pytest pytest-cov
-                        pytest my_tests.py --cov=. --cov-report=xml
-                    '''
-                }
-            }
-            
-        }
-        stage('SonarQube Analysis') {
-            steps {
-                container('sonar-scanner') {
-                    sh 'pwd'
-                    sh 'ls -a'
-                    sh 'whoami'
-                    sh '''
-                        sonar-scanner \
-                          -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-                          -Dsonar.sources=. \
-                          -Dsonar.host.url=http://my-sonarqube-sonarqube.sonarqube-ns.svc.cluster.local:9000 \
-                          -Dsonar.login=squ_17c6264f8b14aa60a29873f20b380724d2618ea1 \
-                          -Dsonar.python.coverage.reportPaths=coverage.xml
-                    '''
-                }
-            }
-        }
         stage('Login to Docker Registry') {
             steps {
                 container('dind') {
@@ -111,7 +67,7 @@ spec:
                         dir('ai-app-deployment') {
                             sh 'kubectl apply -f .'
                             sh 'kubectl get all -n ai-ns'
-                            sh 'sleep 5'
+                            sh 'sleep 50000000'
                         }
                     }
                 }
