@@ -25,7 +25,7 @@ spec:
       runAsUser: 0
     volumeMounts:
     - name: kubeconfig-secret
-      mountPath: /root/.kube/config
+      mountPath: /.kube/config
       subPath: kubeconfig
   - name: dind
     image: docker:dind
@@ -92,9 +92,9 @@ spec:
         stage('Build - Tag - Push') {
             steps {
                 container('dind') {
-                    //sh 'docker build -t nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4 .'
-                    //sh 'docker push nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4'
-                    //sh 'docker pull nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4'
+                    sh 'docker build -t nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4 .'
+                    sh 'docker push nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4'
+                    sh 'docker pull nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4'
                     sh 'docker image ls'
                 }
             }
