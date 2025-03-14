@@ -17,7 +17,7 @@ spec:
         - name: nexus-secret
       containers:
       - name: ai-assistant
-        image: 192.168.19.250:31811/my-repository/my-new-ai-assistant:v4
+        image: 127.0.0.1:30085/my-repository/my-new-ai-assistant:v4
         ports:
         - containerPort: 8501
 ---
