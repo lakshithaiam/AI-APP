@@ -74,7 +74,7 @@ spec:
                           -Dsonar.projectKey=my-python-project \
                           -Dsonar.sources=. \
                           -Dsonar.host.url=http://my-sonarqube-sonarqube.sonarqube-ns.svc.cluster.local:9000 \
-                          -Dsonar.login=squ_17c6264f8b14aa60a29873f20b380724d2618ea1 \
+                          -Dsonar.login=squ_d99b7445a2f161ee7a0cddde96b35d02627d5750 \
                           -Dsonar.python.coverage.reportPaths=coverage.xml
                     '''
                 }
