@@ -85,16 +85,16 @@ spec:
                 container('dind') {
                     sh 'docker --version'
                     sh 'sleep 10'
-                    sh 'docker login nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085 -u admin -p Devops@1252429'
+                    sh 'docker login nexus-service-for-docker-hosted-registry.school-ns.svc.cluster.local:8085 -u admin -p Devops@1252429'
                 }
             }
         }
         stage('Build - Tag - Push') {
             steps {
                 container('dind') {
-                    sh 'docker build -t nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4 .'
-                    sh 'docker push nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4'
-                    sh 'docker pull nexus-service-for-docker-hosted-registry.nexus-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4'
+                    sh 'docker build -t nexus-service-for-docker-hosted-registry.school-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4 .'
+                    sh 'docker push nexus-service-for-docker-hosted-registry.school-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4'
+                    sh 'docker pull nexus-service-for-docker-hosted-registry.school-ns.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v4'
                     sh 'docker image ls'
                 }
             }
