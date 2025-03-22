@@ -73,8 +73,8 @@ spec:
                         sonar-scanner \
                           -Dsonar.projectKey=my-python-project \
                           -Dsonar.sources=. \
-                          -Dsonar.host.url=http://my-sonarqube-sonarqube.sonarqube-ns.svc.cluster.local:9000 \
-                          -Dsonar.login=squ_d99b7445a2f161ee7a0cddde96b35d02627d5750 \
+                          -Dsonar.host.url=http://my-sonarqube-sonarqube.school-ns.svc.cluster.local:9000 \
+                          -Dsonar.login=squ_d44dbae93d898aaeeef265b100d2637dfb4802ed \
                           -Dsonar.python.coverage.reportPaths=coverage.xml
                     '''
                 }
