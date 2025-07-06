@@ -1,26 +1,28 @@
-# Use a slim Python base image
-FROM python:3-slim
+# Stage 1: Builder (installs dependencies)
+FROM python:3.11-slim AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Install dependencies
+# Copy only dependencies first to leverage caching
 COPY requirements.txt .
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt && \
-    rm -rf /root/.cache/pip
 
-# Copy Streamlit config (optional: one location is enough)
+# Install dependencies without keeping cache
+RUN pip install -r requirements.txt --no-deps && \
+rm -rf /root/.cache/pip
+
+# Stage 2: Final lightweight image
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Copy installed dependencies from the builder stage
+COPY --from=builder /usr/local/lib/python3.*/site-packages /usr/local/lib/python3.*/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+# Copy application files
 COPY .streamlit /root/.streamlit
-
-# Copy app code
+COPY .streamlit /app/.streamlit
 COPY . .
 
-# Streamlit settings: disable auto-reload to avoid inotify errors
-ENV STREAMLIT_SERVER_RUNONSAVE=false
-ENV STREAMLIT_SERVER_HEADLESS=true
-ENV STREAMLIT_SERVER_PORT=8501
-ENV STREAMLIT_SERVER_ADDRESS=0.0.0.0
-
-# Run the app
+# Set entrypoint command
 CMD ["streamlit", "run", "main.py"]
