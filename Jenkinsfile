@@ -95,8 +95,8 @@ spec:
         stage('Build - Tag - Push') {
             steps {
                 container('dind') {
-                    sh 'docker build -t nexus-service-for-docker-hosted-registry.nexus.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v6 .'
-                    sh 'docker push nexus-service-for-docker-hosted-registry.nexus.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v6'
+                    sh 'docker build -t nexus-service-for-docker-hosted-registry.nexus.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v1 .'
+                    sh 'docker push nexus-service-for-docker-hosted-registry.nexus.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v1'
                     //sh 'docker pull nexus-service-for-docker-hosted-registry.nexus.svc.cluster.local:8085/my-repository/my-new-ai-assistant:v5'
                     sh 'docker image ls'
                 }
@@ -108,7 +108,7 @@ spec:
                     script {
                         dir('ai-app-deployment') {
                             sh 'kubectl get node'
-                            //sh 'kubectl apply -f ai-assistant-deployment.yaml'
+                            sh 'kubectl apply -f ai-assistant-deployment.yaml'
                             sh 'sleep 99999'
                         }
                     }
