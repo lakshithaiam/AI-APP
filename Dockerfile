@@ -17,5 +17,7 @@ COPY .streamlit /root/.streamlit
 COPY .streamlit /app/.streamlit
 COPY . .
 
+ENV STREAMLIT_SERVER_FILEWATCHERTYPE=none
+
 # Command to run the application
-CMD ["streamlit", "run", "main.py"]
+CMD ["streamlit", "run", "main.py", "--server.headless=true", "--server.port=8501"]
